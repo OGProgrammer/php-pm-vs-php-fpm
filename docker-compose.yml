@@ -8,7 +8,7 @@ services:
     #Dev configs
     #command: --bootstrap=laravel --debug=1 --app-env=dev --static-directory=public/
     #Prod configs
-    command: --bootstrap=laravel --debug=0 --app-env=prod --workers=5 --static-directory=public/
+    command: --bootstrap=laravel --debug=0 --app-env=prod --logging=0 --workers=20 --static-directory=public/
     volumes:
       - ./:/var/www
     ports:
