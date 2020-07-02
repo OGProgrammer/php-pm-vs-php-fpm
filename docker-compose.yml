@@ -1,0 +1,38 @@
+version: "3.1"
+
+services:
+  # PHP-PM + Nginx
+  # https://github.com/php-pm/php-pm-docker
+  ppm:
+    image: phppm/nginx
+    #Dev configs
+    #command: --bootstrap=laravel --debug=1 --app-env=dev --static-directory=public/
+    #Prod configs
+    command: --bootstrap=laravel --debug=0 --app-env=prod --workers=5 --static-directory=public/
+    volumes:
+      - ./:/var/www
+    ports:
+      - "8080:80"
+
+  # PHP-FPM + Nginx
+  # https://github.com/bitnami/bitnami-docker-php-fpm
+  phpfpm:
+    image: bitnami/php-fpm
+    networks:
+      - app-tier
+    volumes:
+      - ./:/app
+  nginx:
+    image: 'bitnami/nginx:latest'
+    depends_on:
+      - phpfpm
+    networks:
+      - app-tier
+    ports:
+      - '8888:8080'
+    volumes:
+      - ./server.conf:/opt/bitnami/nginx/conf/server_blocks/yourapp.conf
+
+networks:
+  app-tier:
+    driver: bridge
